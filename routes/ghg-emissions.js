@@ -18,7 +18,7 @@ router.post("/", validateAddData(), (req, res) => {
     }
     res.json({ message: "ghg-emissions route" });
   } catch (error) {
-    res.status(404).json(JSON.parse(error.message));
+    res.status(500).json({ message: error.message });
   }
 });
 

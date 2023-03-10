@@ -1,24 +1,22 @@
 const router = require("express").Router();
-const parameters = ["CO2", "NO2", "SO2"];
-const validator = require("validator");
+const { body, validationResult } = require("express-validator");
 
-router.post("/", (req, res) => {
+function validateAddData() {
+  return [
+    body("country").isAlpha(),
+    body("year").isNumeric(),
+    body("value").isFloat(),
+    body("parameter").isIn(["CO2", "NO2", "SO2"]),
+  ];
+}
+
+router.post("/", validateAddData(), (req, res) => {
   try {
-    const { country, year, value, parameter } = req.body;
-    console.log(country, year, value, parameter);
-
-    if (country && year && value && parameter) {
-      const isFloat = validator.isFloat(value);
-      console.log(isFloat);
-      res.json({ message: "ghg-emissions route" });
-    } else {
-      throw new Error(
-        JSON.stringify({
-          message: "missing body parameters",
-          required: ["country", "year", "value", "parameter"],
-        })
-      );
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+    res.json({ message: "ghg-emissions route" });
   } catch (error) {
     res.status(404).json(JSON.parse(error.message));
   }

@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const { body, validationResult } = require("express-validator");
+const { body, query, validationResult } = require("express-validator");
 const GhgEmission = require("../model/ghg-emissions");
 
-function validateAddData() {
+function validatePostData() {
   return [
     body("country").isString(),
     body("year").isString(),
@@ -11,7 +11,15 @@ function validateAddData() {
   ];
 }
 
-router.post("/", validateAddData(), async (req, res) => {
+function validateGetData() {
+  return [
+    query("start_year").isString(),
+    query("end_year").isString(),
+    query("country_name").isString(),
+  ];
+}
+
+router.post("/", validatePostData(), async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -22,6 +30,25 @@ router.post("/", validateAddData(), async (req, res) => {
     const insertedGhgEmission = await ghgEmission.save();
 
     return res.status(201).json(insertedGhgEmission);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/", validateGetData(), async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { start_year, end_year, parameter, country_name } = req.query;
+    const allGhgEmissions = await GhgEmission.find({
+      year: { $gte: start_year, $lte: end_year },
+      country: country_name,
+      ...(parameter ? { parameter } : {}),
+    });
+    return res.status(200).json(allGhgEmissions);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

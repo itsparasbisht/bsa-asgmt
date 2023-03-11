@@ -4,7 +4,7 @@ const GhgEmission = require("../model/ghg-emissions");
 
 function validatePostData() {
   return [
-    body("country").isString(),
+    body("country").isString().toLowerCase(),
     body("year").isString(),
     body("value").isFloat(),
     body("parameter").isIn(["CO2", "NO2", "SO2"]),
@@ -15,7 +15,7 @@ function validateGetData() {
   return [
     query("start_year").isString(),
     query("end_year").isString(),
-    query("country_name").isString(),
+    query("country_name").isString().toLowerCase(),
   ];
 }
 

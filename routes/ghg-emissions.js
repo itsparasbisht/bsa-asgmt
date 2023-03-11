@@ -3,8 +3,8 @@ const { body, validationResult } = require("express-validator");
 
 function validateAddData() {
   return [
-    body("country").isAlpha(),
-    body("year").isNumeric(),
+    body("country").isString(),
+    body("year").isString(),
     body("value").isFloat(),
     body("parameter").isIn(["CO2", "NO2", "SO2"]),
   ];

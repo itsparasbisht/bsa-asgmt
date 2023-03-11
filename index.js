@@ -1,6 +1,10 @@
 const express = require("express");
 const app = express();
 const PORT = 5000 || process.env.PORT;
+const dbConnect = require("./db/dbConnect");
+
+dbConnect();
+app.use(express.json());
 
 // routes ---------------
 const ghgEmissionsRoute = require("./routes/ghg-emissions");
@@ -11,7 +15,6 @@ app.get("/", (_, res) => {
   });
 });
 
-app.use(express.json());
 app.use("/ghg-emissions", ghgEmissionsRoute);
 
 app.listen(5000, () => {

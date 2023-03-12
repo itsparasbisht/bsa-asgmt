@@ -16,6 +16,7 @@
     "express-validator": "^6.15.0",
     "fast-csv": "^4.3.6",
     "mongoose": "^7.0.1",
+    "redis": "^4.6.5",
     "validator": "^13.9.0"
   }
 }

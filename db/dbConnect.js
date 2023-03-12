@@ -11,11 +11,7 @@ const dbConnect = () => {
     console.log("Could not connect to mongoDB");
   });
 
-  mongoURI = dbURI;
-
-  mongoose.connect(mongoURI);
-
-  return true;
+  mongoose.connect(dbURI);
 };
 
 module.exports = dbConnect;

@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-const PORT = 5000 || process.env.PORT;
+require("dotenv").config();
+const PORT = process.env.PORT;
 const dbConnect = require("./db/dbConnect");
 const ghgEmissionsRoute = require("./routes/ghg-emissions");
 
